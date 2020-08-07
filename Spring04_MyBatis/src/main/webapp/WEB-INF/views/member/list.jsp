@@ -10,6 +10,7 @@
 </head>
 <body>
 	<div class="container">
+		<a href="insertform.do">회원 추가 폼</a>
 		<h1>회원목록입니다.</h1>
 		<table class="table">
 			<thead>
@@ -17,16 +18,20 @@
 					<th>번호</th>
 					<th>이름</th>
 					<th>주소</th>
+					<th>수정</th>
+					<th>삭제</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
 				<c:forEach var="tmp" items="${list }">
-					<th>${tmp.num }</th>
-					<th>${tmp.name }</th>
-					<th>${tmp.addr }</th>
-				</c:forEach>
+				<tr>
+					<td>${tmp.num }</td>
+					<td>${tmp.name }</td>
+					<td>${tmp.addr }</td>
+					<td><a href="updateform.do?num=${tmp.num }">수정</a></td>
+					<td><a href="delete.do?num=${tmp.num }">삭제</a></td>
 				</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>

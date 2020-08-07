@@ -13,6 +13,6 @@ public interface MemberDao {
 	public void update(MemberDto dto);
 	public void delete(int num);
 	
-	public MemberDto getDate(int num);
+	public MemberDto getData(int num);
 	public List<MemberDto> getList();
 }

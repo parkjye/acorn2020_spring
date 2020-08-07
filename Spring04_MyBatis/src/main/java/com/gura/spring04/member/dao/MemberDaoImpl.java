@@ -51,8 +51,8 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public MemberDto getDate(int num) {
-		MemberDto dto = session.selectOne("member.getDate", num);
+	public MemberDto getData(int num) {
+		MemberDto dto = session.selectOne("member.getData", num);
 		/*
 		 * select는 수행 후 결과 값을 가져와야한다.
 		 * select의 결과는 row로 나타난다.
