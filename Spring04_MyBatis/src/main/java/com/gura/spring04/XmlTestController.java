@@ -1,5 +1,8 @@
 package com.gura.spring04;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,5 +29,19 @@ public class XmlTestController {
 		
 		//리턴해주면 xml문서가 응답된다.
 		return d;
+	}
+	
+	@RequestMapping("/xml03")
+	@ResponseBody
+	public HobbyList xml03() {
+		List<String> hobby = new ArrayList<>();
+		hobby.add("java");
+		hobby.add("jsp");
+		hobby.add("spring");
+		
+		HobbyList h = new HobbyList();
+		h.setHobby(hobby);
+		
+		return h;
 	}
 }
