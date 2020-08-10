@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 자동완성 기능을 사용할 수 있게 !DOCTYPE을 작성한다. -->
 
-<!-- namespace="com.gura.spring04.mybatis.MemberMapper"를 member로 수정 -->
+<!-- 
+	namespace="com.gura.spring04.mybatis.MemberMapper"를 member로 수정 
+	MemberDaoImpl에서 사용
+-->
 <mapper namespace="member">
 
 	<!-- 
