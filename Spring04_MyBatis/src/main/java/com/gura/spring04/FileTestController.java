@@ -1,4 +1,4 @@
-package com.gura.spring04.mybatis;
+package com.gura.spring04;
 
 import java.io.File;
 
