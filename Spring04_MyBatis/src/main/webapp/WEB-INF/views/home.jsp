@@ -24,9 +24,17 @@
 		
 		<li><a href="xml01.do">xml 응답 01</a></li>
 		<li><a href="xml02.do">xml 응답 02</a></li>
+		<li><a href="xml03.do">xml 응답 03</a></li>
 	</ul>
 	<button id="testBtn">ajax 테스트(콘솔 확인)</button>
+	
+	<h2>파일 업로드 테스트</h2>
+	<form action="upload.do" method="post" enctype="multipart/form-data">
+		<input type="file" name="myFile"/>
+		<button type="submit">업로드</button>
+	</form>
 </div>
+
 <script src="resources/js/jquery-3.5.1.js"></script>
 <script>
 	$("#testBtn").on("click", function(){
