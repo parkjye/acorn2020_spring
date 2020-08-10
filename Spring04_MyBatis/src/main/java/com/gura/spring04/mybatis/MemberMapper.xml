@@ -5,15 +5,20 @@
 <!-- namespace="com.gura.spring04.mybatis.MemberMapper"를 member로 수정 -->
 <mapper namespace="member">
 
-	<!-- 파라미터를 memberDto로 가지고 와서 insert -->
-	<insert id="insert" parameterType="com.gura.spring04.member.dto.MemberDto">
+	<!-- 
+		* 파라미터를 memberDto로 가지고 와서 insert 
+		* parameterType, resultType의 이름이 길어서 Conriguration.xml에서 <typeAliases>을 통해서 별칭을 줄 수 있다.
+			parameterType에 부여한 별칭 사용.
+			(원래: parameterType="com.gura.spring04.member.dto.MemberDto")
+	-->
+	<insert id="insert" parameterType="memberDto">
 		INSERT INTO member
 		(num, name, addr)
 		VALUES(member_seq.NEXTVAL, #{name}, #{addr})
 		<!-- 자동 바인딩 조건은 컬럼명과 MemberDto 필드명이 동일해야한다. -->
 	</insert>
 	
-	<update id="update" parameterType="com.gura.spring04.member.dto.MemberDto">
+	<update id="update" parameterType="memberDto">
 		UPDATE member
 		SET name = #{name}, addr = #{addr}
 		WHERE num = #{num}
@@ -24,13 +29,13 @@
 		WHERE num = #{num}
 	</delete>
 	
-	<select id="getData" parameterType="int" resultType="com.gura.spring04.member.dto.MemberDto">
+	<select id="getData" parameterType="int" resultType="memberDto">
 		SELECT num, name, addr
 		FROM member
 		WHERE num = #{num}
 	</select>
 	
-	<select id="getList" resultType="com.gura.spring04.member.dto.MemberDto">
+	<select id="getList" resultType="memberDto">
 		SELECT num, name, addr
 		FROM member
 		ORDER BY num ASC
