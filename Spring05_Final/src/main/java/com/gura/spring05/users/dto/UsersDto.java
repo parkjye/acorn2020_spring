@@ -9,15 +9,15 @@ public class UsersDto {
 	private String regdate;
 	
 	public UsersDto() {}
-
-	public UsersDto(String id, String pwd, String newPwd, String email, String profile, String regdate) {
+	
+	public UsersDto(String id, String pwd, String email, String profile, String regdate, String newPwd) {
 		super();
 		this.id = id;
 		this.pwd = pwd;
-		this.newPwd = newPwd;
 		this.email = email;
 		this.profile = profile;
 		this.regdate = regdate;
+		this.newPwd = newPwd;
 	}
 
 	public String getId() {
@@ -34,14 +34,6 @@ public class UsersDto {
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
-	}
-
-	public String getNewPwd() {
-		return newPwd;
-	}
-
-	public void setNewPwd(String newPwd) {
-		this.newPwd = newPwd;
 	}
 
 	public String getEmail() {
@@ -67,6 +59,13 @@ public class UsersDto {
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	
-	
+
+	public String getNewPwd() {
+		return newPwd;
+	}
+
+	public void setNewPwd(String newPwd) {
+		this.newPwd = newPwd;
+	} 
+
 }
