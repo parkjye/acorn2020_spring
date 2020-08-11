@@ -117,8 +117,9 @@
 			<scope>test</scope>
 		</dependency>   
 		
-		<!-- 필요한 라이브러리 하단에 작성 -->
-		<!-- 5. 추가 의존 라이브러리 -->
+		<!-- 
+			필요한 라이브러리는 하단에 작성한다. 
+			`추가 의존 라이브러리` -->
 		
 		<!-- MyBatis 라이브러리 -->
 	  	<dependency>
@@ -183,7 +184,8 @@
 		    <artifactId>spring-tx</artifactId>
 		    <version>4.0.0.RELEASE</version>
 		</dependency>	
-
+		
+		<!-- 추가 의존 라이브러리 끝 -->
 		     
 	</dependencies>
     <build>
