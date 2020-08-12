@@ -37,5 +37,38 @@ public class UsersDaoImpl implements UsersDao{
 			return true;
 		}
 	}
+
+	//인자로 전달되는 ID에 해당되는 사용자 정보를 리턴하는 메소드
+	@Override
+	public UsersDto getData(String id) {
+		UsersDto dto = session.selectOne("users.getData", id);
+	
+		return dto;
+	}
+
+	@Override
+	public void delete(String id) {
+		session.delete("users.delete", id);
+		
+		}
+
+	@Override
+	public void update(UsersDto dto) {
+		session.update("users.update", dto);
+		
+	}
+
+	@Override
+	public boolean updatePwd(UsersDto dto) {
+		
+		//update문의 영향을 받은 row의 갯수가 리턴된다.
+		int result = session.update("users.updatePwd", dto);
+		
+		if(result > 0 ) { //pwd가 수정된 row의 갯수는 1이다.
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
 }

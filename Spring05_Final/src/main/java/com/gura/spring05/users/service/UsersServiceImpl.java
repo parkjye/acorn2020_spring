@@ -1,12 +1,15 @@
 package com.gura.spring05.users.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.users.dao.UsersDao;
@@ -53,5 +56,90 @@ public class UsersServiceImpl implements UsersService{
 		}else {
 			mView.addObject("isSuccess", false);
 		}
+	}
+
+	@Override
+	public void getInfo(HttpSession session, ModelAndView mView) {
+		
+		//로그인 된 ID를 session객체를 이용해서 얻어온다.
+		String id = (String)session.getAttribute("id");
+		
+		//dao 를 이용해서 사용자 정보를 얻어와서 
+		UsersDto dto = dao.getData(id);
+		
+		//mView 객체에 담아준다. 
+		mView.addObject("dto", dto);
+	}
+
+	@Override
+	public void deleteUser(HttpSession session) {
+		String id = (String)session.getAttribute("id");
+		
+		//삭제
+		dao.delete(id);
+		
+		//로그아웃 처리
+		session.invalidate();	
+	}
+
+	@Override
+	public Map<String, Object> saveProfileImage(HttpServletRequest request, MultipartFile mfile) {
+		
+		//원본 파일명
+		String orgFileName = mfile.getOriginalFilename();
+		
+		// webapp/upload 폴더까지 실제 경로 (서버의 파일시스템 상에서의 경로)
+		String realPath = request.getServletContext().getRealPath("/upload");
+		
+		//저장할 파일의 상세 경로
+		String filePath = realPath+File.separator;
+		
+		/*
+		 * [ 디렉토리를 만들 파일 객체 생성 }
+		 * 만약 디렉토리가 존재하지 않으면 만들어준다.
+		 * */
+		File upload = new File(filePath);
+		if(!upload.exists()) {
+			upload.mkdir();
+		}
+		
+		//저장할 파일명을 구성한다.
+		String saveFileName = System.currentTimeMillis()+orgFileName;
+		try {
+			//upload 폴더에 파일을 저장한다.
+			mfile.transferTo(new File(filePath+saveFileName));
+			System.out.println(filePath+saveFileName);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		//Map에 업로드된 이미지 파일의 경로를 담아서 리턴한다.
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("imageSrc", "/upload/"+saveFileName);
+		
+		return map;
+	}
+
+	@Override
+	public void updateUser(HttpSession session, UsersDto dto) {
+		
+		String id = (String)session.getAttribute("id");
+		dto.setId(id);
+		//dao를 이용해서 수정반영한다.
+		dao.update(dto);
+	}
+
+	@Override
+	public void updateUserPwd(HttpSession session, UsersDto dto, ModelAndView mView) {
+		String id = (String)session.getAttribute("id");
+		dto.setId(id);
+		
+		//dao객체를 이용해서 비밀번호를 수정한다(실패 가능성 있음)
+		boolean isSuccess = dao.updatePwd(dto);
+		
+		//mView 객체에 성공여부를 담는다.
+		mView.addObject("isSuccess", isSuccess);
+		
 	}
 }

@@ -21,4 +21,28 @@
 		WHERE id=#{id} AND pwd=#{pwd}
 	</select>
 	
+	<select id="getData" parameterType="string" resultType="usersDto">
+		SELECT id, pwd, email, profile, TO_CHAR(regdate, 'YY.MM.DD HH24"시"MM"분"') AS regdate
+		FROM users
+		WHERE id=#{id}
+	</select>
+	
+	<delete id="delete" parameterType="string">
+		DELETE FROM users
+		WHERE id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="usersDto">
+		UPDATE users
+		SET email=#{email}, profile=#{profile}
+		WHERE id=#{id}
+	</update>
+	
+	<update id="updatePwd" parameterType="usersDto">
+		UPDATE users 
+		SET pwd=#{newPwd}
+		<!-- AND조건을 걸어서 비밀번호를 잘 못 입력했을 경우 pwd변경 안됨. -->
+		WHERE id=#{id} AND pwd=#{pwd}
+	</update>
+	
 </mapper>

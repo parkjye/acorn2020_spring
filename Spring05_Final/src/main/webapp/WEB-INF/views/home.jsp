@@ -3,9 +3,19 @@
     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
-<head>
+<!-- 
+	Failed to load resource: the server responded with a status of 404 ()
+	해당 오류 발생할 경우 
+	<head>에 profile="http://www.w3.org/2005/10/profile"
+	<head></head> 요소 안에 
+	<link rel="icon" type="image/png" href="http://example.com/myicon.png">
+	추가하면 된다.
+ -->
+<head profile="http://www.w3.org/2005/10/profile">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>/views/home.jsp</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/bootstrap.css" />
+<link rel="icon" type="image/png" href="http://example.com/myicon.png">
 </head>
 <body>
 <div class="container">
@@ -15,7 +25,7 @@
 			<a href="${pageContext.request.contextPath }/users/signup_form.do">회원가입</a>
 		</c:when>
 		<c:otherwise>
-			<strong>${id }</strong>님 로그인 중
+			<a href="${pageContext.request.contextPath }/users/private/info.do"><strong>${id }</strong></a>님 로그인 중
 			<a href="${pageContext.request.contextPath }/users/logout.do">로그아웃</a>
 		</c:otherwise>
 	</c:choose>

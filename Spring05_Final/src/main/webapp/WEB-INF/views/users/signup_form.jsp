@@ -33,7 +33,7 @@
 			<div class="invalid-feedback">이메일 형식에 맞게 입력해 주세요.</div>
 		</div>
 		<button class="btn btn-primary" type="submit">가입</button>
-		<button class="btn btn-danger" type="reset">Reset</button>
+		<button class="btn btn-danger" type="reset">취소</button>
 	</form>
 </div>
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.5.1.js"></script>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.users.dto.UsersDto;
@@ -81,4 +82,73 @@ public class UsersController {
 		session.invalidate();
 		return "redirect:/home.do";
 	}
+	
+	//개인정보 요청 처리
+	@RequestMapping("/users/private/info")
+	public ModelAndView info(HttpServletRequest request, ModelAndView mView) {
+		//session인자 없으니까 request를 통해서 얻는다.
+		service.getInfo(request.getSession(), mView);
+		mView.setViewName("users/private/info");
+		return mView;
+	}
+	
+	@RequestMapping("/users/private/delete")
+	public ModelAndView delete(HttpServletRequest request, ModelAndView mView) {
+		
+		//서비스를 이용해서 사용자 정보를 삭제한다.
+		service.deleteUser(request.getSession());
+		
+		mView.setViewName("users/private/delete");
+		return mView;
+	}
+	
+	//회원정보 수정 폼 요청 처리
+	@RequestMapping("/users/private/updateform")
+	public ModelAndView updateForm(HttpServletRequest request, ModelAndView mView) {
+		
+		service.getInfo(request.getSession(), mView);
+		mView.setViewName("users/private/updateform");
+		return mView;
+	}
+	
+	// ajax 프로필 사진 업로드 요청 처리
+	@RequestMapping("/users/private/profile_upload")
+	@ResponseBody
+	public Map<String, Object> profile_upload(HttpServletRequest request, @RequestParam MultipartFile image) {
+		
+		//service 객체를 이용해서 이미지를 upload폴더에 저장하고 Map을 리턴받는다.
+		Map<String, Object> map = service.saveProfileImage(request, image);
+		//{"imageSrc":"/upload/xxx.jsp"} 형식의 JSON 문자열을 출력하기 위해 Map을 @ResponseBody로 리턴해준다. 
+		
+		return map;
+	}
+	
+	//개인정보 수정 반영 요청
+	@RequestMapping("/users/private/update")
+	public ModelAndView update(HttpServletRequest request, UsersDto dto, ModelAndView mView) {
+		
+		//service 객체를 이용해서 개인정보를 수정한다.
+		service.updateUser(request.getSession(), dto);
+		
+		mView.setViewName("redirect:/users/private/info.do");
+		return mView;
+	}
+	
+	@RequestMapping("/users/private/pwd_updateform")
+	public ModelAndView pwdUpdateform(ModelAndView mView) {
+		mView.setViewName("users/private/pwd_updateform");		
+		return mView;
+	}
+	
+	@RequestMapping("/users/private/pwd_update")
+	public ModelAndView pwdUpdate(ModelAndView mView, UsersDto dto, HttpServletRequest request) {
+		
+		//service객체를 이용해서 새로운 비밀번호로 수정한다.
+		service.updateUserPwd(request.getSession(), dto, mView);
+		
+		mView.setViewName("users/private/pwd_update");
+		return mView;
+	}
+	
+	
 }
