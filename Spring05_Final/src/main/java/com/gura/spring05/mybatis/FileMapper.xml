@@ -74,5 +74,10 @@
 		from board_file
 		where num=#{num} 
 	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from board_file
+		where num=#{num}
+	</delete>
 
 </mapper>

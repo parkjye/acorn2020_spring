@@ -67,9 +67,19 @@ public class FileController {
 		 *  @Component("fileDownView")가 붙어있는 AbstractView 객체를 찾아간다. 
 		 * */
 		mView.setViewName("fileDownView");
+		return mView;
+	}
+	
+	//파일 삭제 요청 처리
+	@RequestMapping("/file/private/delete")
+	public ModelAndView delete(@RequestParam int num, ModelAndView mView, HttpServletRequest request) {
+		
+		fileService.deleteFile(num, request);
+		mView.setViewName("redirect:/file/list.do");
 		
 		return mView;
 	}
+	
 	
 	
 }//FileController
