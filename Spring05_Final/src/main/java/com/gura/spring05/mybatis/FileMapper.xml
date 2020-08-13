@@ -65,7 +65,7 @@
 	<insert id="insert" parameterType="fileDto">
 		insert into board_file
 		(num, title, writer, orgFileName, saveFileName, fileSize, regdate)
-		values(board_file_seq.nextval, #{writer}, #{title}, #{orgFileName}, #{saveFileName}, #{fileSize}, sysdate)
+		values(board_file_seq.nextval, #{title}, #{writer}, #{orgFileName}, #{saveFileName}, #{fileSize}, sysdate)
 	</insert>
 
 </mapper>
