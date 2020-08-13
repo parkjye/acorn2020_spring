@@ -49,16 +49,9 @@ public class UsersDaoImpl implements UsersDao{
 	}
 
 	@Override
-	public boolean updatePwd(UsersDto dto) {
+	public void updatePwd(UsersDto dto) {
+		session.update("users.updatePwd", dto);
 		
-		//update문의 영향을 받은 row의 갯수가 리턴된다.
-		int result = session.update("users.updatePwd", dto);
-		
-		if(result > 0 ) { //pwd가 수정된 row의 갯수는 1이다.
-			return true;
-		}else {
-			return false;
-		}
 	}
 	
 }
