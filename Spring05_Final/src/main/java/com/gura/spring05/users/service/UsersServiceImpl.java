@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,9 +56,28 @@ public class UsersServiceImpl implements UsersService{
 
 	@Override
 	public void loginProcess(UsersDto dto, ModelAndView mView, HttpSession session) {
+
+		//입력한 정보가 유요한 정보인지 여부를 저장할 지역변수
+		boolean isValid=false;
 		
-		//dao 객체를 이용해서 id , pwd 가 유효한 정보인지 여부를 얻어낸다. 
-		boolean isValid=dao.isValid(dto);
+
+		/* 
+		 * [ DB에 저장된 암호화된 비밀번호를 읽어온다. ]
+		 * 
+		 * 로그인 폼에 입력한 아이디를 이용해서 DB에서 select한다.
+		 * 존재하지 않는 아이디는 null.
+		 * */
+		UsersDto resultDto = dao.getData(dto.getId());
+		if(resultDto != null) { //아이디 존재(==ID 일치)
+			String encodedPwd = resultDto.getPwd(); //DB에 저장된 암호화된 pwd
+			String inputPwd = dto.getPwd(); // 로그인 폼에 입력한 pwd
+			
+			/*
+			 * BCrypt 클래스의 static 메소드를 이용해서 
+			 * (두 비밀번호를 비교해서) 일치여부를 얻어낸다.
+			 * */
+			isValid = BCrypt.checkpw(inputPwd, encodedPwd);
+		}
 		
 		if(isValid) {//만일 유효한 정보이면 
 			//로그인 처리를 한다. 
