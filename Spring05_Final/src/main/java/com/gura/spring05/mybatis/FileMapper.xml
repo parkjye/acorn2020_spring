@@ -2,7 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="file">
+	<!-- 
+		[ #{}, ${}의 차이 ]
 
+		#{} JDBC에서 ?(바인드 변수)로 치환해서 실행할 때 값을 넣어준다. (바인딩)
+			속도가 더 빠르다.
+		
+		${} 실행전에 값을 넣어서 미리 문자열을 구성한다.(전처리 구문)
+			구성->실행, 구성->실행, 으로 동작하기 때문에 속도가 더 느리다.
+		
+		공통: 문자열을 구성할 땐 싱글 따옴표로 감싼다. (ex. '${}')
+	-->
 	<select id="getList" parameterType="fileDto" resultType="fileDto">
 		select *
 		from
@@ -11,9 +21,12 @@
 				(select num, writer, title, orgFileName, saveFileName, 
 						fileSize, regdate
 				from board_file
-				<choose>
-					<!-- EL사용 가능하다 (ex. != 를 ne로 사용)-->
-					<!-- test="" true인 경우 실행. parameterType으로 전달된 dto 필드를 사용할 수 있다. -->
+				<choose> <!-- 동적sql -->
+					<!-- 
+						[ test=""는 true인 경우 실행된다. ] 
+							parameterType으로 전달된 dto필드만 사용할 수 있다.
+						
+						EL사용 가능하다 (ex. != 를 ne로 사용) -->
 					<when test="title != null and orgFileName != null"> 
 						where title like or orgFileName like '%${title}'
 						or orgFileName like '%'||#{orgFileName}||'%'
@@ -26,18 +39,14 @@
 					</when>
 				</choose>
 				order by num desc) result1)
-				<!-- myBatis가 실행하기 전에 #{}은 ? 치환한 후 실행(속도가 더 빠르다)
-							${} 실행전에 값을 넣어서(ex.10) sql문을 완성해둔다.(==전처리 구문, 구성->실행, 구성->실행을 반복하기 때문에 조금 더 느리다)
-					if 문자열을 구성할 때 '${}' 싱글 따옴표로 감싸줘야한다. -->
-		where rnum between #{startRowNum} and ${endRowNum} 
+				where rnum between #{startRowNum} and ${endRowNum}
 	</select>
 	
 	<!-- 전체 row의 수 확인 -->
 	<select id="getCount" parameterType="fileDto" resultType="int">
-		<!-- (MAX(ROWNUM) == null이면 0으로 -->
+		<!-- (MAX(ROWNUM) == null이면 0을 넣는다. -->
 		select NVL(MAX(ROWNUM), 0)
 		from board_file
-		<!-- 동적sql -->
 		<choose>
 			<when test="title != null and orgFileName != null"> 
 				where title like or orgFileName like '%${title}'

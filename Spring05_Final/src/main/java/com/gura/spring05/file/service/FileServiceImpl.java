@@ -21,12 +21,9 @@ public class FileServiceImpl implements FileService{
 	@Autowired
 	private FileDao fileDao;
 	
-	//한 페이지에 나타낼 row 의 갯수
-	final int PAGE_ROW_COUNT=5;
 	
-	//하단 디스플레이 페이지 갯수
-	final int PAGE_DISPLAY_COUNT=5;
-
+	final int PAGE_ROW_COUNT=5; //한 페이지에 나타낼 row의 갯수
+	final int PAGE_DISPLAY_COUNT=5; //하단 디스플레이 페이지 갯수
 	
 	@Override
 	public void getList(HttpServletRequest request) {
@@ -34,17 +31,14 @@ public class FileServiceImpl implements FileService{
 		//로그인 된 아이디 읽어오기 (로그인을 하지 않으면 null 이다)
 		String id = (String)request.getSession().getAttribute("id");
 		
-		//페이지 row의 수는 변경하지 않는 상수니까 필드에 선언한다.
-		
 		//보여줄 페이지의 번호
 		int pageNum=1;
 		
 		//보여줄 페이지의 번호가 파라미터로 전달되는지 읽어와 본다.	
 		String strPageNum=request.getParameter("pageNum");
 		
-		if(strPageNum != null){//페이지 번호가 파라미터로 넘어온다면
-			//페이지 번호를 설정한다.
-			pageNum=Integer.parseInt(strPageNum);
+		if(strPageNum != null){ //페이지 번호가 파라미터로 넘어온다면
+			pageNum=Integer.parseInt(strPageNum); //페이지 번호로 설정한다.
 		}
 		
 		//보여줄 페이지 데이터의 시작 ResultSet row 번호
@@ -68,8 +62,8 @@ public class FileServiceImpl implements FileService{
 		//인코딩된 키워드를 미리 만들어 둔다. 
 		String encodedK=URLEncoder.encode(keyword);
 		
-		//검색 키워드와 startRowNum, endRowNum 을 담을 FileDto 객체 생성
-		FileDto dto=new FileDto();
+		//검색 키워드와 startRowNum, endRowNum을 담을 FileDto 객체 생성
+		FileDto dto = new FileDto();
 		dto.setStartRowNum(startRowNum);
 		dto.setEndRowNum(endRowNum);
 		
@@ -82,22 +76,20 @@ public class FileServiceImpl implements FileService{
 				
 			}else if(condition.equals("title")){
 				dto.setTitle(keyword);
-
 				
 			}else if(condition.equals("writer")){
 				dto.setWriter(keyword);
-
 			}
 		}
+		
 		
 		//파일 목록 얻어오기
 		List<FileDto> list = fileDao.getList(dto);
 		
-		//전체 row 의 갯수를 담을 변수 
+		//전체 row 갯수를 담을 변수 
 		int totalRow=fileDao.getCount(dto);
 		
-		
-		//전체 페이지의 갯수 구하기
+		//전체 페이지의 갯수
 		int totalPageCount=(int)Math.ceil(totalRow/(double)PAGE_ROW_COUNT);
 		
 		//시작 페이지 번호
@@ -111,7 +103,7 @@ public class FileServiceImpl implements FileService{
 			endPageNum=totalPageCount; //보정해준다. 
 		}
 		
-		//EL 에서 사용할 값을 미리 request 에 담아두기
+		//EL에서 사용할 값을 미리 request에 담아두기
 		request.setAttribute("list", list);
 		request.setAttribute("startPageNum", startPageNum);
 		request.setAttribute("endPageNum", endPageNum);
@@ -120,6 +112,6 @@ public class FileServiceImpl implements FileService{
 		request.setAttribute("condition", condition);
 		request.setAttribute("keyword", keyword);
 		request.setAttribute("encodedK", encodedK);
-		
 	}
-}
+	
+}//FileServiceImpl

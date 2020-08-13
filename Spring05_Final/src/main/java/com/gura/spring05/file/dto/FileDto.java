@@ -6,9 +6,9 @@ public class FileDto {
 	private String title;
 	private String orgFileName;
 	private String saveFileName;
-	private long fileSize; //파일의 크기는 byte단위로 다루기 때문에 long int 형으로 사용
+	private long fileSize; //파일의 크기는 byte단위로 다루기 때문에 long으로 사용
 	private String regdate;
-	//페이징 처리를 하기 위한 필드
+	
 	private int startRowNum;
 	private int endRowNum;
 	

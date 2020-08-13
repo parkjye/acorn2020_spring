@@ -14,7 +14,7 @@ public class FileDaoImpl implements FileDao{
 	private SqlSession session;
 	
 	
-	//파일목록을 리턴
+	//파일목록 리턴
 	public List<FileDto> getList(FileDto dto) {
 		List<FileDto> list = session.selectList("file.getList", dto);
 		return list;
