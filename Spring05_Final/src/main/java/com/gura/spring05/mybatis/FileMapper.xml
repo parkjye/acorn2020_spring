@@ -60,5 +60,12 @@
 			</when>
 		</choose>
 	</select>
+	
+	<!-- 파일 업로드 -->
+	<insert id="insert" parameterType="fileDto">
+		insert into board_file
+		(num, title, writer, orgFileName, saveFileName, fileSize, regdate)
+		values(board_file_seq.nextval, #{writer}, #{title}, #{orgFileName}, #{saveFileName}, #{fileSize}, sysdate)
+	</insert>
 
 </mapper>

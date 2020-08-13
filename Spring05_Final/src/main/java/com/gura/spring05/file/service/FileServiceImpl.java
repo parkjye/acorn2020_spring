@@ -1,5 +1,6 @@
 package com.gura.spring05.file.service;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.file.dao.FileDao;
 import com.gura.spring05.file.dto.FileDto;
@@ -112,6 +115,74 @@ public class FileServiceImpl implements FileService{
 		request.setAttribute("condition", condition);
 		request.setAttribute("keyword", keyword);
 		request.setAttribute("encodedK", encodedK);
+	}
+
+	@Override
+	public void saveFile(FileDto dto, ModelAndView mView, HttpServletRequest request) {
+		
+		/*
+		 * < 파일 업로드 동작 >
+		 * 
+		 * 1. temp(임시)폴더에 저장해둔다.
+		 * 2. 업로드 된 파일정보가 MultipartFile myFile객체에 들어간다.
+		 * 
+		 * 	옮길 대상이 되는 파일 객체를 넣으면, 옮겨준다.
+		 *	업로드 폴더의 리얼패스를 읽어서 파일명이 겹치지 않도록 생성해서 준다.
+		 * 
+		 * action)
+		 * 원본 파일명과 저장된 파일명을 각각 얻어낸다.
+		 * temp에 있는 파일을 복사해서 webContent에 업로드(붙혀넣기)한다.
+		 * 		
+		 * */
+		
+		//업로드된 파일의 정보를 가지고 있는 MultipartFile객체의 참조값 얻어오기
+		MultipartFile myFile = dto.getMyFile();
+		
+		//원본 파일명
+		String orgFileName = myFile.getOriginalFilename();
+		
+		//파일의 크기
+		long fileSize = myFile.getSize();
+		
+		// webapp/upload 폴더까지 실제 경로 (서버의 파일시스템 상에서의 경로)
+		String realPath = request.getServletContext().getRealPath("/upload");
+		
+		//저장할 파일의 상세 경로
+		String filePath = realPath+File.separator;
+		
+		/*
+		 * [ 디렉토리를 만들 파일 객체 생성 }
+		 * 만약 디렉토리가 존재하지 않으면 만들어준다.
+		 * */
+		File upload = new File(filePath);
+		if(!upload.exists()) {
+			upload.mkdir();
+		}
+		
+		//저장할 파일명을 구성한다.
+		String saveFileName = System.currentTimeMillis()+orgFileName;
+		try {
+			//upload 폴더에 파일을 저장한다.
+			myFile.transferTo(new File(filePath+saveFileName));
+			System.out.println(filePath+saveFileName);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		//dto에 업로드된 파일의 정보를 담는다.
+		String id = (String)request.getSession().getAttribute("id");
+		
+		dto.setWriter(id); //세션에서 읽어낸 파일 업로더의 id
+		dto.setOrgFileName(orgFileName);
+		dto.setSaveFileName(saveFileName);
+		dto.setFileSize(fileSize);
+		
+		//fileDao를 이용해서 DB에 저장하기
+		fileDao.insert(dto);
+		
+		//view페이지에서 사용할 모델 담기
+		mView.addObject("dto", dto);
 	}
 	
 }//FileServiceImpl
