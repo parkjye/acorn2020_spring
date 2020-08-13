@@ -30,8 +30,13 @@
 		</c:otherwise>
 	</c:choose>
 
-	<h1>인덱스 페이지 입니다.</h1>
-	<p>Spring Framework 동작중 ...</p>
+	<div class="wrap" style="margin:10 auto">
+		<h1>인덱스 페이지 입니다.</h1>
+		<p>Spring Framework 동작중 ...</p>
+		<ul>
+			<li><a href="file/list.do">자료실 목록 보기</a></li>
+		</ul>
+	</div>
 </div>
 </body>
 </html>
