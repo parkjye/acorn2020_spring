@@ -27,10 +27,16 @@ public class FileDaoImpl implements FileDao{
 		return session.selectOne("file.getCount", dto);
 	}
 
-
+	//파일 정보 저장하는 메소드
 	@Override
 	public void insert(FileDto dto) {
 		session.insert("file.insert", dto);
 		
+	}
+
+	//파일 한 개의 정보 가져오는 메소드
+	@Override
+	public FileDto getDate(int num) {
+		return session.selectOne("file.getData", num);
 	}
 }

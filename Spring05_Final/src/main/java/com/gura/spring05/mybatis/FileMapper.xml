@@ -67,5 +67,12 @@
 		(num, title, writer, orgFileName, saveFileName, fileSize, regdate)
 		values(board_file_seq.nextval, #{title}, #{writer}, #{orgFileName}, #{saveFileName}, #{fileSize}, sysdate)
 	</insert>
+	
+	<!-- 파일 가졍오기 -->
+	<select id="getData" parameterType="int" resultType="fileDto">
+		select num, writer, title, orgFileName, saveFileName, fileSize, regdate
+		from board_file
+		where num=#{num} 
+	</select>
 
 </mapper>

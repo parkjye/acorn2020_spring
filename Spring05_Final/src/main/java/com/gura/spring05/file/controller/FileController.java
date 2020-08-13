@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.file.dto.FileDto;
@@ -46,6 +47,19 @@ public class FileController {
 		
 		fileService.saveFile(dto, mView, request);
 		mView.setViewName("file/private/upload");
+		return mView;
+	}
+	
+	//파일 다운로드 요청처리
+	@RequestMapping("/file/download")
+	public ModelAndView download(@RequestParam int num, ModelAndView mView) {
+		
+		//mView에 다운로드할 파일의 정보를 담고
+		fileService.getFileDate(num, mView);
+		
+		//view페이지로 이동해서 다운로드 시켜준다.
+		mView.setViewName("file/download");
+		
 		return mView;
 	}
 	

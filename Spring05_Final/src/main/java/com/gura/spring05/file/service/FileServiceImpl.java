@@ -184,5 +184,15 @@ public class FileServiceImpl implements FileService{
 		//view페이지에서 사용할 모델 담기
 		mView.addObject("dto", dto);
 	}
+
+	@Override
+	public void getFileDate(int num, ModelAndView mView) {
+		
+		//fileDao를 이용해서 파일 정보를 얻는다.
+		FileDto dto = fileDao.getDate(num);
+		
+		//mView객체에 담는다.
+		mView.addObject("dto", dto);
+	}
 	
 }//FileServiceImpl
