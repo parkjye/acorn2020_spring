@@ -54,11 +54,19 @@ public class FileController {
 	@RequestMapping("/file/download")
 	public ModelAndView download(@RequestParam int num, ModelAndView mView) {
 		
-		//mView에 다운로드할 파일의 정보를 담고
+		//mView에 다운로드할 파일의 정보를 담는다.
 		fileService.getFileDate(num, mView);
 		
-		//view페이지로 이동해서 다운로드 시켜준다.
-		mView.setViewName("file/download");
+		/*
+		 * [ view페이지로 이동해서 다운로드 시켜준다. ]
+		 * 
+		 * 	view container에서 이름(fileDownView)에 해당하는 view를 찾는다. (0순위)
+		 * 	없으면, view폴더에 있는 .jsp페이지를 찾고 (1순위)
+		 * 	해당 폴더에도 없으면 404 error.
+		 *  
+		 *  @Component("fileDownView")가 붙어있는 AbstractView 객체를 찾아간다. 
+		 * */
+		mView.setViewName("fileDownView");
 		
 		return mView;
 	}
