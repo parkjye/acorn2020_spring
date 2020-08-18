@@ -11,6 +11,7 @@ public interface CafeService {
 	public void updateContent(CafeDto dto);
 	public void deleteContent(int num, HttpServletRequest request);
 	
-	public void saveComment(HttpServletRequest request); //댓글 저장
-
+	//댓글 관련 기능
+	public void saveComment(HttpServletRequest request); //저장
+	public void deleteComment(HttpServletRequest request); //삭제
 }

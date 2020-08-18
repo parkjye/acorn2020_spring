@@ -38,4 +38,10 @@
 		set content=#{content}
 		where num=#{content}
 	</update>
+	
+	<select id="getData" parameterType="int" resultType="cafeCommentDto">
+		select num, writer, content, ref_group, comment_group, deleted, regdate
+		from board_cafe_comment
+		where num=#{num}
+	</select>
 </mapper>

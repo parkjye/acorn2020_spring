@@ -214,5 +214,24 @@ public class CafeServiceImpl implements CafeService{
 		cafeCommentDao.insert(dto);
 		
 	}
+
+	@Override
+	public void deleteComment(HttpServletRequest request) {
+		//get방식 파라미터로 전달되는 삭제할 댓글 번호
+		int num = Integer.parseInt(request.getParameter("num"));
+		
+		//세션에 저장된 로그인된 아이디
+		String id = (String)request.getSession().getAttribute("id");
+		
+		//댓글의 정보를 얻어와서 댓글의 작성자와 동일한지 비교한다.
+		String writer = (String)request.getSession().getAttribute("writer");
+		
+		if(!writer.equals(id)) {
+			throw new NotDeleteException("남의 댓글을 삭제할 수 없습니다.");
+		}else {
+			cafeCommentDao.delete(num);
+		}
+		
+	}
 	
 }//CafeServiceImpl

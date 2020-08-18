@@ -10,4 +10,7 @@ public interface CafeCommentDao {
 	public void insert(CafeCommentDto dto); //추가
 	public int getSequence(); //추가할 댓글의 글번호 리턴
 	public void update(CafeCommentDto dto); //수정
+	public CafeCommentDto getData(int num); //한 개의 댓글 정보 리턴
+	
 }
+

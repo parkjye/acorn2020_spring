@@ -82,4 +82,11 @@ public class CafeController {
 		return mView;
 	}
 	
+	public ModelAndView commentDelete(HttpServletRequest request, ModelAndView mView, @RequestParam int ref_group) {
+		cafeService.deleteComment(request);
+		mView.setViewName("redirect:/cafe/detail.do?num="+ref_group);
+		
+		return mView;
+	}
+	
 }
