@@ -17,8 +17,10 @@ import com.gura.spring05.file.dto.FileDto;
 
 @Service
 public class CafeServiceImpl implements CafeService{
-	@Autowired	private CafeDao cafeDao;
-	@Autowired 	private CafeCommentDao cafeCommentDao;
+	@Autowired
+	private CafeDao cafeDao;
+	@Autowired
+	private CafeCommentDao cafeCommentDao;
 	
 	//한 페이지에 나타낼 row 의 갯수
 	final int PAGE_ROW_COUNT=5;
@@ -173,71 +175,58 @@ public class CafeServiceImpl implements CafeService{
 	public void saveComment(HttpServletRequest request) {
 		//댓글 작성자
 		String writer=(String)request.getSession().getAttribute("id");
-		
 		//폼 전송되는 댓글의 정보 얻어내기
-		int ref_group = Integer.parseInt(request.getParameter("ref_group"));
+		int ref_group=Integer.parseInt(request.getParameter("ref_group"));
 		String target_id=request.getParameter("target_id");
 		String content=request.getParameter("content");
 		/*
-		 * 원글의 댓글은 comment_group 번호가 전송이 안되고
-		 * 댓글의 댓글은 comment_group 번호가 전송이 된다.
-		 * 
-		 * 따라서 null여부를 조사하면 원글의 댓글인지, 
-		 * 댓글의 댓글인지 판단할 수 있다.
-		 * 
-		 * */
+		 *  원글의 댓글은 comment_group 번호가 전송이 안되고
+		 *  댓글의 댓글은 comment_group 번호가 전송이 된다.
+		 *  따라서 null 여부를 조사하면 원글의 댓글인지 댓글의 댓글인지 판단할수 있다. 
+		 */
 		String comment_group=request.getParameter("comment_group");
-		
-		//댓글의 글 번호를 미리 읽어온다.
+		//새 댓글의 글번호는 dao 를 이용해서 미리 얻어낸다. 
 		int seq=cafeCommentDao.getSequence();
 		
 		//저장할 댓글 정보를 dto에 담는다.
 		CafeCommentDto dto = new CafeCommentDto();
+
 		dto.setNum(seq);
 		dto.setWriter(writer);
 		dto.setTarget_id(target_id);
 		dto.setContent(content);
 		dto.setRef_group(ref_group);
-		
-		if(comment_group==null) { //원글의 댓글인 경우
-			
-			//댓글의 글번호가 comment_group 번호가 된다.
+		if(comment_group==null) {//원글의 댓글인 경우 
+			//댓글의 글번호가 comment_group 번호가 된다. 
 			dto.setComment_group(seq);
-			
-		}else { //댓글의 댓글인 경우
-			
-			//폼 전송된 comment_group번호를 숫자로 바꿔서 dto에 넣어준다.
+		}else {//댓글의 댓글인 경우 
+			//폼 전송된 comment_group 번호를 숫자로 바꿔서 dto 에 넣어준다.
 			dto.setComment_group(Integer.parseInt(comment_group));
 		}
-		
-		//댓글 정보를 DB에 저장한다.
+		//댓글 정보를 DB 에 저장한다.
 		cafeCommentDao.insert(dto);
-		
 	}
 
 	@Override
 	public void deleteComment(HttpServletRequest request) {
-		//get방식 파라미터로 전달되는 삭제할 댓글 번호
-		int num = Integer.parseInt(request.getParameter("num"));
+		//GET 방식 파라미터로 전달되는 삭제할 댓글 번호 
+		int num=Integer.parseInt(request.getParameter("num"));
 		
 		//세션에 저장된 로그인된 아이디
-		String id = (String)request.getSession().getAttribute("id");
+		String id=(String)request.getSession().getAttribute("id");
 		
-		//댓글의 정보를 얻어와서 댓글의 작성자와 동일한지 비교한다.
-		String writer = (String)request.getSession().getAttribute("writer");
-		
+		//댓글의 정보를 얻어와서 댓글의 작성자와 같은지 비교 한다.
+		String writer=cafeCommentDao.getData(num).getWriter();
 		if(!writer.equals(id)) {
-			throw new DoNotDeleteException("남의 댓글을 삭제할 수 없습니다.");
-		}else {
-			cafeCommentDao.delete(num);
+			throw new DoNotDeleteException("남의 댓글을 삭제할수 없습니다.");
 		}
-		
+		cafeCommentDao.delete(num);
 	}
 
 	@Override
 	public void updateComment(CafeCommentDto dto) {
 		cafeCommentDao.update(dto);
-		
 	}
 	
 }//CafeServiceImpl
+

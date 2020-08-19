@@ -25,8 +25,7 @@ public class CafeController {
 	
 	//카페 글 목록 보기 요청 처리 
 	@RequestMapping("/cafe/list")
-	public ModelAndView getList(HttpServletRequest request, 
-			ModelAndView mView) {
+	public ModelAndView getList(HttpServletRequest request, ModelAndView mView) {
 		cafeService.getList(request);
 		mView.setViewName("cafe/list");
 		return mView;
@@ -64,35 +63,34 @@ public class CafeController {
 		mView.setViewName("cafe/updateform");
 		return mView;
 	}
+	
 	@RequestMapping(value="/cafe/private/update", method=RequestMethod.POST)
 	public ModelAndView update(CafeDto dto, ModelAndView mView) {
 		cafeService.updateContent(dto);
 		mView.setViewName("cafe/update");
 		return mView;
 	}
+	
 	@RequestMapping("/cafe/private/delete")
-	public ModelAndView delete(int num, HttpServletRequest request,
-			ModelAndView mView) {
+	public ModelAndView delete(int num, HttpServletRequest request, ModelAndView mView) {
 		cafeService.deleteContent(num, request);
 		mView.setViewName("redirect:/cafe/list.do");
 		return mView;
 	}
 	
-	@RequestMapping(value="/cafe/private/comment_insert", method=RequestMethod.POST)
-	public ModelAndView commentInsert(HttpServletRequest request, ModelAndView mView, @RequestParam int ref_group) {
-		//새 댓글을 저장하고
+	@RequestMapping(value = "/cafe/private/comment_insert", method=RequestMethod.POST)
+	public ModelAndView commentInsert(HttpServletRequest request,
+			ModelAndView mView, @RequestParam int ref_group) {
+		//새 댓글을 저장하고 
 		cafeService.saveComment(request);
-		
-		//보고 있던 글 자세히 보기로 리다이렉트 이동한다.
+		//보고 있던 글 자세히 보기로 다시 리다일렉트 이동 시킨다.
 		mView.setViewName("redirect:/cafe/detail.do?num="+ref_group);
 		return mView;
 	}
-	
 	@RequestMapping("/cafe/private/comment_delete")
 	public ModelAndView commentDelete(HttpServletRequest request, ModelAndView mView, @RequestParam int ref_group) {
 		cafeService.deleteComment(request);
 		mView.setViewName("redirect:/cafe/detail.do?num="+ref_group);
-		
 		return mView;
 	}
 
@@ -100,17 +98,13 @@ public class CafeController {
 	@RequestMapping(value="/cafe/private/comment_update", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> commentUpdate(CafeCommentDto dto){
-		
-		//댓글을 수정반영하고
+		//댓글을 수정 반영하고 
 		cafeService.updateComment(dto);
-		
 		//JSON 문자열을 클라이언트에게 응답한다.
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map=new HashMap<>();
 		map.put("num", dto.getNum());
 		map.put("content", dto.getContent());
-		
 		return map;
-		
 	}
-	
+
 }
