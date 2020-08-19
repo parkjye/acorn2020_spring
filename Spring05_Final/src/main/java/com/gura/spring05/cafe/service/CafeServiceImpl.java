@@ -227,10 +227,16 @@ public class CafeServiceImpl implements CafeService{
 		String writer = (String)request.getSession().getAttribute("writer");
 		
 		if(!writer.equals(id)) {
-			throw new NotDeleteException("남의 댓글을 삭제할 수 없습니다.");
+			throw new DoNotDeleteException("남의 댓글을 삭제할 수 없습니다.");
 		}else {
 			cafeCommentDao.delete(num);
 		}
+		
+	}
+
+	@Override
+	public void updateComment(CafeCommentDto dto) {
+		cafeCommentDao.update(dto);
 		
 	}
 	

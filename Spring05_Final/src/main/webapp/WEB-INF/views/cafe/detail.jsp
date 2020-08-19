@@ -33,7 +33,8 @@
 		margin-left: 50px;
 	}
 	.comment_form textarea, .comment_form button, 
-		.comment-insert-form textarea, .comment-insert-form button{
+		.comment-insert-form textarea, .comment-insert-form button,
+		.comment-update-form textarea, .comment-update-form button{
 		float: left;
 	}
 	.comments li{
@@ -42,11 +43,13 @@
 	.comments ul li{
 		border-top: 1px solid #888;
 	}
-	.comment_form textarea, .comment-insert-form textarea{
+	.comment_form textarea, .comment-insert-form textarea,
+		.comment-update-form textarea{
 		width: 85%;
 		height: 100px;
 	}
-	.comment_form button, .comment-insert-form button{
+	.comment_form button, .comment-insert-form button,
+		.comment-update-form button{
 		width: 15%;
 		height: 100px;
 	}
@@ -87,7 +90,8 @@
 <div class="container">
 	<c:if test="${not empty keyword }">
 		<p class="alert alert-info">
-			<strong>${keyword }</strong>라는 키워드로 검색한 결과에 대한 자세히 보기 입니다.
+			<strong>${keyword }</strong> 라는 키워드로 검색한 결과에 대한 
+			자세히 보기 입니다.
 		</p>
 	</c:if>
 
@@ -154,7 +158,8 @@
 						<li>삭제된 댓글 입니다.</li>
 					</c:when>
 					<c:otherwise>
-						<li <c:if test="${tmp.num ne tmp.comment_group }">style="padding-left:50px;"</c:if>>
+						<!-- 댓글의 글 번호를 같이 출력해서 id를 부여한다. ex. li id=comment1, id=comment3 ... -->
+						<li id="comment${tmp.num }"<c:if test="${tmp.num ne tmp.comment_group }">style="padding-left:50px;"</c:if>>
 							<c:if test="${tmp.num ne tmp.comment_group }"><svg class="reply_icon" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-return-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 		  						<path fill-rule="evenodd" d="M10.146 5.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 9l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
 		  						<path fill-rule="evenodd" d="M3 2.5a.5.5 0 0 0-.5.5v4A2.5 2.5 0 0 0 5 9.5h8.5a.5.5 0 0 0 0-1H5A1.5 1.5 0 0 1 3.5 7V3a.5.5 0 0 0-.5-.5z"/></svg>
@@ -179,6 +184,7 @@
 									<span>${tmp.regdate }</span>
 									<a href="javascript:" class="reply_link">답글</a>
 									<c:if test="${tmp.writer eq id }">
+										| <a href="javascript:" class="comment-update-link">수정</a>
 										| <a href="javascript:deleteComment(${tmp.num })">삭제</a>
 									</c:if>
 								</dt>
@@ -186,14 +192,23 @@
 									<pre>${tmp.content }</pre>
 								</dd>
 							</dl>
-							<form class="comment-insert-form" 
-								action="private/comment_insert.do" method="post">
+							<form class="comment-insert-form" action="private/comment_insert.do" method="post">
 								<input type="hidden" name="ref_group" value="${dto.num }"/>
 								<input type="hidden" name="target_id" value="${tmp.writer }"/>
 								<input type="hidden" name="comment_group" value="${tmp.comment_group }"/>
+								
 								<textarea name="content"></textarea>
 								<button type="submit">등록</button>
 							</form>
+							<!-- 로그인된 아이디와 댓글의 작성자가 같으면 수정 폼 출력 -->
+							<c:if test="${tmp.writer eq id }">
+								<form class="comment-update-form" 
+									action="private/comment_update.do" method="post">
+									<input type="hidden" name="num" value="${tmp.num }"/>
+									<textarea name="content">${tmp.content }</textarea>
+									<button type="submit">수정</button>
+								</form>
+							</c:if>
 						</li>						
 					</c:otherwise>
 				</c:choose>
@@ -214,7 +229,30 @@
 	</div>
 </div>
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.5.1.js"></script>
+<script src="${pageContext.request.contextPath }/resources/js/jquery.form.min.js"></script>
+<!-- jquery.form.min.js은 플러그인이다. 반드시 jquery가 필요하기 때문에 먼저 로딩해야한다. -->
 <script>
+	//댓글 수정 링크를 눌렀을때 호출되는 함수 등록
+	$(".comment-update-link").on("click", function(){
+		$(this).parent().parent().parent()
+		.find(".comment-update-form")
+		.slideToggle();
+	});
+	//로딩한 jquery.form.min.js jquery플러그인의 기능을 이용해서 댓글 수정폼을 
+	//ajax 요청을 통해 전송하고 응답받기
+	$(".comment-update-form").ajaxForm(function(data){
+		console.log(data);
+		
+		//수정이 일어난 댓글의 li요소를 선택해서 원하는 작업을 한다.
+		var selector="#comment"+data.num; //"#comment6" 형식의 선택자 구성
+		
+		//댓글 수정 폼을 안보이게 한다.
+		$(selector).find(".comment-update-form").slideUp();
+		
+		//pre요소에 출력된 내용 수정하기
+		$(selector).find("pre").text(data.content);
+		
+	});
 	function deleteComment(num){
 		var isDelete=confirm("댓글을 삭제 하시겠습니까?");
 		if(isDelete){
@@ -234,10 +272,10 @@
 		
 		$(this).parent().parent().parent().find(".comment-insert-form")
 		.slideToggle();
-		if($(this).text()=="답글"){//링크 text를 답글일 때 클릭하면 
+		if($(this).text()=="답글"){//링크 text를 답글일때 클릭하면 
 			$(this).text("취소");//취소로 바꾸고 
-		}else{//취소일 때 클릭하면 
-			$(this).text("답글");//답글로 바꾼다.
+		}else{//취소일때 크릭하면 
+			$(this).text("답글");//답들로 바꾼다.
 		}	
 	});
 	$(".comment_form form").on("submit", function(){
