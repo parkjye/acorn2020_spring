@@ -154,6 +154,18 @@
 		</a>			
 	</c:if>
 	
+	<hr/>
+	
+	<!-- 원글에 댓글을 작성하는 form -->
+	<form class="comment-form insert-form" action="private/comment_insert.do" method="post">
+		<!-- 원글의 글번호가 ref_group 번호가 된다. -->
+		<input type="hidden" name="ref_group" value="${dto.num }"/>
+		<!-- 원글의 작성자가 댓글의 수신자가 된다. -->
+		<input type="hidden" name="target_id" value="${dto.writer }"/>
+		<textarea name="content"><c:if test="${empty id }">로그인이 필요합니다</c:if></textarea>
+		<button type="submit">등록</button>
+	</form>
+	
 	<!-- 댓글 목록 -->
 	<div class="comments">
 		<ul>
@@ -221,15 +233,7 @@
 			</c:forEach>
 		</ul>
 	</div>
-	<!-- 원글에 댓글을 작성하는 form -->
-	<form class="comment-form insert-form" action="private/comment_insert.do" method="post">
-		<!-- 원글의 글번호가 ref_group 번호가 된다. -->
-		<input type="hidden" name="ref_group" value="${dto.num }"/>
-		<!-- 원글의 작성자가 댓글의 수신자가 된다. -->
-		<input type="hidden" name="target_id" value="${dto.writer }"/>
-		<textarea name="content"><c:if test="${empty id }">로그인이 필요합니다</c:if></textarea>
-		<button type="submit">등록</button>
-	</form>
+
 	<div class="loader">
 		<img src="${pageContext.request.contextPath }/resources/images/ajax-loader.gif"/>
 	</div>
