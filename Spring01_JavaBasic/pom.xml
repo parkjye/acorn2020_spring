@@ -17,25 +17,34 @@
     </plugins>
   </build>
   
-  
-  	<!-- 의존 라이브러리 실행 -->
-	<dependencies>
-		<!-- 스프링 기본 라이브러리 -->
-	  	<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-context</artifactId>
-		    <version>4.0.0.RELEASE</version>
-		</dependency>
-		
-		
-		<!-- Spring Security Web 4.0.0.RELEASE 라이브러리 -->
-		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
-		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-web</artifactId>
-		    <version>4.0.0.RELEASE</version>
-		</dependency>
-		
-	</dependencies>
+  <!-- 의존 라이브러리 설정 -->
+  <dependencies>
+	<!--  스프링 기본 라이브러리 -->
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context</artifactId>
+	    <version>4.0.0.RELEASE</version>
+	</dependency>
+	
+	<!-- 스프링 시큐리티 4.0버전 -->
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-web</artifactId>
+	    <version>4.0.0.RELEASE</version>
+	</dependency>
+	
+	<!-- Aop 용 라이브러리 -->
+  	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aop</artifactId>
+		<version>4.0.0.RELEASE</version>
+	</dependency>
+  	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjweaver</artifactId>
+		<version>1.8.0</version>
+	</dependency>
+  </dependencies>
 </project>
+
