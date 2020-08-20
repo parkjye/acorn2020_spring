@@ -320,6 +320,39 @@
 	//전체 페이지의 수를 javascript 변수에 담아준다.
 	var totalPageCount=${totalPageCount};
 	
+	/*
+		페이지 로딩 시점에 document의 높이가 window의 실제 높이 보다 작고,
+		전체 페이지의 갯수가(totalPageCount) 현재 페이지(currentPage)보다 크면
+		추가로 댓글을 받아오는 ajax요청을 해야한다.
+		
+		cf.
+		var windowHeight=$(window).height();를 사용하면
+		documentHeight와 값이 동일해서 윈도우 객체내의 필드 높이를 계산한다.
+	*/
+	var documentHeight=$(document).height();
+	var windowHeight=window.screen.height;
+	
+	if(documentHeight < windowHeight && totalPageCount > currentPage){
+		//로딩 이미지 띄우기
+		$(".loader").show();
+		
+		currentPage++; //페이지를 1 증가 시키고
+		
+		//해당 페이지의 내용을 ajax 요청해서 받아온다. 
+		$.ajax({
+			url:"ajax_comment_list.do",
+			method:"get",
+			data:{pageNum:currentPage, ref_group:${dto.num}},
+			success:function(data){
+				console.log(data);
+				//data 가 html 마크업 형태의 문자열 
+				$(".comments ul").append(data);
+				//로딩 이미지를 숨긴다. 
+				$(".loader").hide();
+			}
+		});
+	}
+	
 	//웹브라우저에 scoll 이벤트가 일어 났을때 실행할 함수 등록 
 	$(window).on("scroll", function(){
 		if(currentPage == totalPageCount){//만일 마지막 페이지 이면 
