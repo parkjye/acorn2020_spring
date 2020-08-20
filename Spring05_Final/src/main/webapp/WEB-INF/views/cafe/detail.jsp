@@ -95,8 +95,7 @@
 <div class="container">
 	<c:if test="${not empty keyword }">
 		<p class="alert alert-info">
-			<strong>${keyword }</strong> 라는 키워드로 검색한 결과에 대한 
-			자세히 보기 입니다.
+			<strong>${keyword }</strong> 라는 키워드로 검색한 결과에 대한 자세히 보기 입니다.
 		</p>
 	</c:if>
 
@@ -153,18 +152,6 @@
 			삭제
 		</a>			
 	</c:if>
-	
-	<hr/>
-	
-	<!-- 원글에 댓글을 작성하는 form -->
-	<form class="comment-form insert-form" action="private/comment_insert.do" method="post">
-		<!-- 원글의 글번호가 ref_group 번호가 된다. -->
-		<input type="hidden" name="ref_group" value="${dto.num }"/>
-		<!-- 원글의 작성자가 댓글의 수신자가 된다. -->
-		<input type="hidden" name="target_id" value="${dto.writer }"/>
-		<textarea name="content"><c:if test="${empty id }">로그인이 필요합니다</c:if></textarea>
-		<button type="submit">등록</button>
-	</form>
 	
 	<!-- 댓글 목록 -->
 	<div class="comments">
@@ -232,12 +219,44 @@
 				</c:choose>
 			</c:forEach>
 		</ul>
+	</div><!-- comments -->
+	
+	<!-- 위에 float:left 에 영향을 받지 않게 하기 위해  -->
+	<div class="clearfix"></div>
+	
+	<div class="page-display">
+		<ul class="pagination pagination-sm">
+		<c:if test="${startPageNum ne 1 }"><!-- num=${dto.num }은 카페 글번호 / pageNum=${startPageNum-1 }은 comment 페이지 번호-->
+			<li class="page-item"><a class="page-link" href="detail.do?num=${dto.num }&pageNum=${startPageNum-1 }">Prev</a></li>
+		</c:if>
+		<c:forEach var="i" begin="${startPageNum }" end="${endPageNum }">
+			<c:choose>
+				<c:when test="${i eq pageNum }">
+					<li class="page-item active"><a class="page-link" href="detail.do?num=${dto.num }&pageNum=${i }">${i }</a></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="detail.do?num=${dto.num }&pageNum=${i }">${i }</a></li>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${endPageNum lt totalPageCount }">
+			<li class="page-item"><a class="page-link" href="detail.do?num=${dto.num }&pageNum=${endPageNum+1 }">Next</a></li>
+		</c:if>
+		</ul>
 	</div>
-
-	<div class="loader">
-		<img src="${pageContext.request.contextPath }/resources/images/ajax-loader.gif"/>
-	</div>
-</div>
+	
+	<!-- 원글에 댓글을 작성하는 form -->
+	<form class="comment-form insert-form" action="private/comment_insert.do" method="post">
+		<!-- 원글의 글번호가 ref_group 번호가 된다. -->
+		<input type="hidden" name="ref_group" value="${dto.num }"/>
+		<!-- 원글의 작성자가 댓글의 수신자가 된다. -->
+		<input type="hidden" name="target_id" value="${dto.writer }"/>
+		<textarea name="content"><c:if test="${empty id }">로그인이 필요합니다</c:if></textarea>
+		<button type="submit">등록</button>
+	</form>
+	
+</div><!-- container -->
+<div class="loader"><img src="${pageContext.request.contextPath }/resources/images/ajax-loader.gif"/></div>
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.5.1.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/jquery.form.min.js"></script>
 <script>
@@ -271,11 +290,10 @@
 				//pre 요소에 출력된 내용 수정하기
 				$(selector).find("pre").text(data.content);
 			});
-			//폼 전송을 막아준다.
-			return false;
+			return false; //폼 전송을 막는다.
 	});
 	
-		$(document).on("click",".comment-delete-link", function(){
+	$(document).on("click",".comment-delete-link", function(){
 		//삭제할 글번호 
 		var num=$(this).attr("data-num");
 		var isDelete=confirm("댓글을 삭제 하시겠습니까?");
@@ -284,6 +302,7 @@
 			"/cafe/private/comment_delete.do?num="+num+"&ref_group=${dto.num}";
 		}
 	});
+		
 	//답글 달기 링크를 클릭했을때 실행할 함수 등록
 	$(document).on("click",".reply-link", function(){
 		//로그인 여부
@@ -294,11 +313,15 @@
 					"url=${pageContext.request.contextPath }/cafe/detail.do?num=${dto.num}";
 		}
 		
-		$(this).parent().parent().parent().find(".re-insert-form")
+		//$(this).parent().parent().parent().find(".re-insert-form") == $(this).attr("data-num")의 다른 표현
+		var selector="#comment"+$(this).attr("data-num");
+		$(selector)
+		.find(".re-insert-form")
 		.slideToggle();
+		
 		if($(this).text()=="답글"){//링크 text를 답글일때 클릭하면 
 			$(this).text("취소");//취소로 바꾸고 
-		}else{//취소일때 크릭하면 
+		}else{//취소일때 클릭하면
 			$(this).text("답글");//답들로 바꾼다.
 		}	
 	});
@@ -313,83 +336,14 @@
 			return false; //폼 전송 막기 		
 		}
 	});
+	
 	function deleteConfirm(){
 		var isDelete=confirm("이 글을 삭제 하시겠습니까?");
 		if(isDelete){
 			location.href="delete.do?num=${dto.num}";
 		}
 	}
-	//페이지가 처음 로딩될때 1page 를 보여준다고 가정
-	var currentPage=1;
-	//전체 페이지의 수를 javascript 변수에 담아준다.
-	var totalPageCount=${totalPageCount};
 	
-	/*
-		페이지 로딩 시점에 document의 높이가 window의 실제 높이 보다 작고,
-		전체 페이지의 갯수가(totalPageCount) 현재 페이지(currentPage)보다 크면
-		추가로 댓글을 받아오는 ajax요청을 해야한다.
-		
-		cf.
-		var windowHeight=$(window).height();를 사용하면
-		documentHeight와 값이 동일해서 윈도우 객체내의 필드 높이를 계산한다.
-	*/
-	var documentHeight=$(document).height();
-	var windowHeight=window.screen.height;
-	
-	if(documentHeight < windowHeight && totalPageCount > currentPage){
-		//로딩 이미지 띄우기
-		$(".loader").show();
-		
-		currentPage++; //페이지를 1 증가 시키고
-		
-		//해당 페이지의 내용을 ajax 요청해서 받아온다. 
-		$.ajax({
-			url:"ajax_comment_list.do",
-			method:"get",
-			data:{pageNum:currentPage, ref_group:${dto.num}},
-			success:function(data){
-				console.log(data);
-				//data 가 html 마크업 형태의 문자열 
-				$(".comments ul").append(data);
-				//로딩 이미지를 숨긴다. 
-				$(".loader").hide();
-			}
-		});
-	}
-	
-	//웹브라우저에 scoll 이벤트가 일어 났을때 실행할 함수 등록 
-	$(window).on("scroll", function(){
-		if(currentPage == totalPageCount){//만일 마지막 페이지 이면 
-			return; //함수를 여기서 종료한다. 
-		}
-		//위쪽으로 스크롤된 길이 구하기
-		var scrollTop=$(window).scrollTop();
-		//window 의 높이
-		var windowHeight=$(window).height();
-		//document(문서)의 높이
-		var documentHeight=$(document).height();
-		//바닥까지 스크롤 되었는지 여부
-		var isBottom = scrollTop+windowHeight + 10 >= documentHeight;
-		if(isBottom){//만일 바닥까지 스크롤 했다면...
-			//로딩 이미지 띄우기
-			$(".loader").show();
-			
-			currentPage++; //페이지를 1 증가 시키고 
-			//해당 페이지의 내용을 ajax  요청을 해서 받아온다. 
-			$.ajax({
-				url:"ajax_comment_list.do",
-				method:"get",
-				data:{pageNum:currentPage, ref_group:${dto.num}},
-				success:function(data){
-					console.log(data);
-					//data 가 html 마크업 형태의 문자열 
-					$(".comments ul").append(data);
-					//로딩 이미지를 숨긴다. 
-					$(".loader").hide();
-				}
-			});
-		}
-	});
 </script>
 </body>
 </html>
