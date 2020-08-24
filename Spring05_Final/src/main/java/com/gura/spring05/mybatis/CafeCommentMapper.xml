@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cafeComment">
+	<select id="getList" parameterType="int" resultType="cafeCommentDto">
+		select num, writer, content, target_id, ref_group,
+				comment_group, deleted, board_cafe_comment.regdate, profile
+				<!-- regdate는 board_cafe_comment와 board_cafe에 둘 다 있으니까 정확히 명시  -->
+		from board_cafe_comment
+		<!-- board_cafe_comment의 작성자와 users table의 id가 동일한 댓글 -->
+		INNER JOIN users
+		ON board_cafe_comment.writer=users.id
+		where ref_group=#{ref_group}
+		order by comment_group asc, num asc
+	</select>
+	
+	<update id="delete" parameterType="int">
+		update board_cafe_commnet
+		set deleted='yes'
+		where num=#{num}
+	</update>
+	
+	<insert id="insert" parameterType="cafeCommentDto"> 
+		insert into board_cafe_comment
+		(num, writer, content, target_id, ref_group, comment_group, regdate)
+		values(#{num}, #{writer}, #{content}, #{target_id}, #{ref_group},
+				#{comment_group}, sysdate)
+		<!-- comment_group번호와 #{num}을 동일하게 하기 위해 num.nextval을 안한다.
+			insert전에 미리 시퀀스 값을 불러와야 한다. -->
+	</insert>
+	
+	<select id="getSequence" resultType="int">
+		select board_cafe_comment_seq.nextval
+		from dual <!-- dummy table -->
+	</select>
+	
+	<update id="update" parameterType="cafeCommentDto">
+		update board_cafe_comment
+		set content=#{content}
+		where num=#{content}
+	</update>
+</mapper>
