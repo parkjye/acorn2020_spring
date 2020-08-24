@@ -10,15 +10,11 @@ public class CafeCommentDto {
 	private String deleted; //삭제된 댓글인지 확인할 필드('yes' or 'no')
 	private String regdate;
 	private String profile; //프로필 이미지 경로를 저장할 필드
-<<<<<<< HEAD
-
-=======
 	
 	//페이징
 	private int startRowNum;
 	private int endRowNum;
 	
->>>>>>> 42384dd... <Feat> cafe :: Comment 페이징 기능 구현
 	public CafeCommentDto() {}
 
 	public CafeCommentDto(int num, String writer, String content, String target_id, int ref_group, int comment_group,
@@ -109,9 +105,6 @@ public class CafeCommentDto {
 		this.profile = profile;
 	}
 
-<<<<<<< HEAD
-
-=======
 	public int getStartRowNum() {
 		return startRowNum;
 	}
@@ -128,5 +121,4 @@ public class CafeCommentDto {
 		this.endRowNum = endRowNum;
 	}
 	
->>>>>>> 42384dd... <Feat> cafe :: Comment 페이징 기능 구현
 }
