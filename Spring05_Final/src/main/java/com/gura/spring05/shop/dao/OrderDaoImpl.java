@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 import com.gura.spring05.shop.dto.OrderDto;
 
 @Repository
-public class OoderDaoImpl implements OrderDao{
+public class OrderDaoImpl implements OrderDao{
 	@Autowired SqlSession session;
 	
 	@Override
 	public void addOrder(OrderDto dto) {
-		// TODO Auto-generated method stub
+		session.insert("shop.addOrder", dto);
 		
 	}
 
