@@ -28,7 +28,7 @@
 	
 	<update id="plusPoint" parameterType="shopDto">
 		update client_account 
-		set point=poin+#{price}*0.1
+		set point=point+#{price}*0.1
 		where id=#{id}
 	</update>
 	
