@@ -23,7 +23,7 @@ public class DeleteAspect {
 	@Autowired private CafeDao cafeDao;
 	
 	
-	@Around("execution(void com.gura.spring05.cafe.service.deleteContent(..))")
+	@Around("execution(void com.gura.spring05.cafe.service.*.deleteContent(..))")
 	public void checkCafeDelete(ProceedingJoinPoint joinPoint) throws Throwable {
 		//메소드에 전달된 인자값을 저장할 지역변수
 		int num = 0;
