@@ -9,16 +9,26 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/bootstrap.css" />
 <script src="${pageContext.request.contextPath }/resources/js/angular.min.js"></script>
 <script>
-	//"myApp"이라는 이름의 모듈 만들기
+
+	/*
+		[ flow ]
+		1. 모듈 만들기
+		2. 만들어둔 모듈 컨트롤러 만들기
+		3. 컨트롤러 내에 모델, 함수 등을 준비
+		4. 원하는 때에 호출해서 사용
+	*/
+	
+	// "myApp"이라는 이름의 모듈 만들기
 	var myApp = angular.module("myApp", []);
 	
-	//모듈을 이용해서 myCtrl이라는 이름의 컨트롤러 만들기
+	// 모듈을 이용해서 myCtrl이라는 이름의 컨트롤러 만들기
 	myApp.controller("myCtrl", function($scope){
 		/*
 			- 이 함수는 페이지가 로딩되는 시점에 최초 한 번 호출된다.
+			
 			- $scope에는 angular가 관리하는 특별한 객체가 전달된다.
 			- $scope는 해당 컨트롤러에서 사용하는 영역 객체이다.
-			- $scope에는 각각의 컨트롤러에서 사용하는 모델(데이터)가 저장된다.
+			- $scope에는 각각의 컨트롤러에서 사용하는 모델(데이터)이 저장된다.
 		*/
 		console.log("myCtrl에 있는 함수 호출됨");
 		console.log($scope);
