@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/angularjs/test06.jsp</title>
+<title>/angularjs/test07.jsp</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/bootstrap.css" />
 <script src="${pageContext.request.contextPath }/resources/js/angular.min.js"></script>
 <script>
