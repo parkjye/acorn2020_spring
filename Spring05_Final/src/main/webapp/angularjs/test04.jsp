@@ -9,11 +9,10 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/bootstrap.css" />
 <script src="${pageContext.request.contextPath }/resources/js/angular.min.js"></script>
 </head>
-<!-- ng-app body에서 일어나는 일은 angular로 관리를 하겠다는 의미이다. -->
 <body ng-app> 
 <div class="container">
 	<h1>form 검증</h1>
-	<!-- novalidate는 웹 브라우저가 자체 유효성 검증을 하지 못하도록 하는 설정 
+	<!-- novalidate는 웹 브라우저가 자체 유효성 검증을 하지 못하도록 한다.
 		웹 브라우저의 간섭을 제거한다.
 	-->
 	<form name="myForm" action="insert.jsp" method="post" novalidate>
@@ -24,10 +23,10 @@
 		
 		<!-- [ 아래 문구를 보여줄 조건 2가지 ]
 		
-			1. id가 유효하지 않고(입력X),id를 입력했다가 삭제하면 
+			1. id가 유효하지 않고(입력X), id를 입력했다가 삭제하면(필드가 수정된 적이 있으면 $dirty)
 				페이지가 처음 뿌려질 때는 아래 문구를 보여주지 않는다.
 				
-			2. id가 유효하거나(입력O), 페이지가 처음 뿌려진(로딩된) 상태면,
+			2. id가 유효하거나(입력O), 페이지가 처음 뿌려진(로딩된) 상태면(=필드가 수정된 적이 없으면 $pristine)
 				아래 문구를 숨겨놓는다.
 			-->
 		<p ng-show="myForm.id.$invalid && myForm.id.$dirty" style="color:red;">아이디는 반드시 입력하세요</p>
@@ -42,8 +41,8 @@
 	
 	<!-- $pristine 처음 페이지가 뿌려졌을 때 input=text에 입력한 적이 한 번도 없으면 true 
 		한 번이라도 입력한 경험이 있으면 내용을 지워도 false이다. <==>$dirty -->
-	<p>아이디의 청결(순결) 여부: <strong>{{myForm.id.$pristine}}</strong></p>
-	<p>아이디의 더렵혀졌는지 여부: <strong>{{myForm.id.$dirty}}</strong></p>
+	<p>아이디의 pristine 여부: <strong>{{myForm.id.$pristine}}</strong></p>
+	<p>아이디의 dirty 여부: <strong>{{myForm.id.$dirty}}</strong></p>
 </div>
 </body>
 </html>

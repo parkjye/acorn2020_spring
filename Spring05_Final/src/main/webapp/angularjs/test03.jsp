@@ -18,9 +18,9 @@
 	<button class="btn {{a}}">버튼 2</button>
 	<button class="btn {{b}}">버튼 3</button>
 	
-	<!-- 해당 클래스 추가여부를 boolean값으로 관리한다. -->
 	<button ng-class="['btn', 'btn-success']">버튼 4</button> <!-- 배열 형태 -->
-	<button ng-class="{'btn':true, 'btn-success':true}">버튼 5</button> <!-- object 형태 -->
+	<!-- object 형태, 해당 클래스 추가여부를 boolean값으로 관리한다. -->
+	<button ng-class="{'btn':true, 'btn-success':true, 'btn-lg':false}">버튼 5</button> 
 	<br/>
 	
 	<input type="checkbox" ng-model="isLarge"/><!-- true or false -->

@@ -9,7 +9,6 @@
 <!-- angularjs 로딩 --> 
 <script src="${pageContext.request.contextPath }/resources/js/angular.min.js"></script>
 </head>
-<!-- ng-app body에서 일어나는 일은 angular로 관리를 하겠다는 의미이다. -->
 <body ng-app> 
 <!-- 
 	count라는 이름의 모델을 만들고 초기값을 0으로 부여한다. 
