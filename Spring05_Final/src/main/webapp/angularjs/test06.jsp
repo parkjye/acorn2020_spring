@@ -9,15 +9,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/bootstrap.css" />
 <script src="${pageContext.request.contextPath }/resources/js/angular.min.js"></script>
 <script>
-
-	/*
-		[ flow ]
-		1. 모듈 만들기
-		2. 만들어둔 모듈 컨트롤러 만들기
-		3. 컨트롤러 내에 모델, 함수 등을 준비
-		4. 원하는 때에 호출해서 사용
-	*/
-	
 	// "myApp"이라는 이름의 모듈 만들기
 	var myApp = angular.module("myApp", []);
 	
@@ -25,6 +16,8 @@
 	myApp.controller("myCtrl", function($scope){
 		/*
 			- 이 함수는 페이지가 로딩되는 시점에 최초 한 번 호출된다.
+			- 호출하면서 영역개체도 전달한다.
+			- java의 생성자같은 역할.
 			
 			- $scope에는 angular가 관리하는 특별한 객체가 전달된다.
 			- $scope는 해당 컨트롤러에서 사용하는 영역 객체이다.
@@ -65,6 +58,8 @@
 		<!-- ng-click="nick=''" $scope.nick이라는 의미이다. -->
 		<!-- ng-model로 만들어지는 것은 $scope에 만들어지는 것이다. -->
 		<button ng-click="nick='개구라'">click</button>
+		
+		<!-- $scope.btnClicked(); -->
 		<button ng-click="btnClicked()">click 2</button>
 	</div>
 	

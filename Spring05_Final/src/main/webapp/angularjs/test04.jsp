@@ -39,8 +39,7 @@
 	<p>유효한 아이디 인가요?: <strong>{{myForm.id.$valid}}</strong></p>
 	<p>유효하지 않은 아이디 인가요?: <strong>{{myForm.id.$invalid}}</strong></p>
 	
-	<!-- $pristine 처음 페이지가 뿌려졌을 때 input=text에 입력한 적이 한 번도 없으면 true 
-		한 번이라도 입력한 경험이 있으면 내용을 지워도 false이다. <==>$dirty -->
+	<!-- 필드가 초기 상태면 $pristine, 한 번이라도 입력된 경험이 있으면 $dirty -->
 	<p>아이디의 pristine 여부: <strong>{{myForm.id.$pristine}}</strong></p>
 	<p>아이디의 dirty 여부: <strong>{{myForm.id.$dirty}}</strong></p>
 </div>
