@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>angularfs/test12.html</title>
+<!-- html페이지는 EL해석을 못하니까 EL문 사용 X -->
+<link rel="stylesheet" href="../resources/css/bootstrap.css" />
+<script src="../resources/js/angular.min.js"></script>
+<script>
+	var cafeApp = angular.module("cafeApp",[]);
+	cafeApp.controller("cafeCtrl", function($scope, $http){
+		//페이지 로딩되는 시점에 실행되는 영역
+		$scope.pageNum=1;
+		
+		//ajax로 카페 글 목록을 요청
+		$http({
+			url:"/spring05/cafe/ajax_list.do",
+			method:"get",
+			params:{pageNum:$scope.pageNum}
+		}).success(function(data){ //서버에 (data)에 [{num},{writer} ... ] 형식의 data가 응답.
+			$scope.list=data; 
+		});
+		
+		//다음 페이지 버튼을 눌렀을 때 호출되는 함수
+		$scope.next=function(){
+			$scope.pageNum++;
+			
+			//ajax로 카페 글 목록을 요청
+			$http({
+				url:"/spring05/cafe/ajax_list.do",
+				method:"get",
+				params:{pageNum:$scope.pageNum}
+			}).success(function(data){
+				$scope.list=data; 
+			});
+		};
+		
+		//goToFirst() 버튼 클릭
+		$scope.goToFirst=function(){
+			$scope.pageNum=1;
+			
+			//ajax로 카페 글 목록을 요청
+			$http({
+				url:"/spring05/cafe/ajax_list.do",
+				method:"get",
+				params:{pageNum:$scope.pageNum}
+			}).success(function(data){
+				$scope.list=data; 
+			});
+		};
+		
+		//페이징 처리
+		
+		
+	});
+</script>
+</head>
+<body ng-app="cafeApp">
+	<div class="container" ng-controller="cafeCtrl">
+		<h1>카페 글 목록</h1>
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>번호</th>
+					<th>작성자</th>
+					<th>제목</th>
+					<th>조회수</th>
+					<th>작성일</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="tmp in list">
+					<td>{{tmp.num}}</td>
+					<td>{{tmp.writer}}</td>
+					<td>{{tmp.title}}</td>
+					<td ng-bind="tmp.viewCount"></td>
+					<td ng-bind="tmp.regdate"></td>
+				</tr>
+			</tbody>
+		</table>
+		<button ng-click="goToFirst()" class="btn btn-outline-primary">1 PAGE</button>
+		<button ng-click="next()" class="btn btn-outline-primary">다음 페이지</button>
+	</div><!-- container -->
+</body>
+</html>
