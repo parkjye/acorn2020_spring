@@ -27,6 +27,13 @@
 				$scope.canUseId=!data.isExist;
 			});	
 		};
+		
+		//비밀번호 입력란을 입력했을 때 호출되는 함수
+		$scope.isPwdEqual=true;
+		$scope.pwdChanged=function(){
+			//비밀번호를 같게 입력했는지 여부를 모델로 관리한다.
+			$scope.isPwdEqual = $scope.pwd==$scope.pwd2;
+		}
 	});
 </script>
 </head>
@@ -49,20 +56,33 @@
 		</div>
 		<div class="form-group">
 			<label for="pwd">비밀번호</label>
-			<input class="form-control" type="password" name="pwd" id="pwd"/>
+			<input class="form-control" type="password" name="pwd" id="pwd"
+				ng-model="pwd"
+				ng-required="true" 
+				ng-minlength="5" 
+				ng-maxlength="10"
+				ng-class="{'is-invalid':(myForm.pwd.$invalid || !isPwdEqual) && myForm.pwd.$dirty,
+							'is-valid': myForm.pwd.$valid && isPwdEquals}" 
+				ng-change="pwdChanged()" />
 			<small class="form-text text-muted">최소 5글자~10글자 이내로 입력 하세요.</small>
-			<div class="invalid-feedback">비밀번호를 확인 하세요.</div>
+			<div class="invalid-feedback">비밀번호가 동일하지 않습니다.</div>
 		</div>
 		<div class="form-group">
 			<label for="pwd2">비밀번호 확인</label>
-			<input class="form-control" type="password" name="pwd2" id="pwd2"/>
+			<input class="form-control" type="password" name="pwd2" id="pwd2"
+				ng-model="pwd2"
+				ng-change="pwdChanged()" />
 		</div>
 		<div class="form-group">
 			<label for="email">이메일</label>
-			<input class="form-control" type="text" name="email" id="email"/>
+			<input class="form-control" type="text" name="email" id="email"
+				ng-model="email",
+				ng-required="true",
+				ng-pattern="/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i",
+				ng-class="{'is-invalid':myForm.email.$invalid && myForm.email.$dirty, 'is-valid':myForm.email.$valid }" />
 			<div class="invalid-feedback">이메일 형식에 맞게 입력해 주세요.</div>
 		</div>
-		<button class="btn btn-primary" type="submit">가입</button>
+		<button ng-disabled="myForm.$invalid || !canUseId || !isPwdEqual" class="btn btn-primary" type="submit">가입</button>
 		<button class="btn btn-danger" type="reset">취소</button>
 	</form>
 </div>
