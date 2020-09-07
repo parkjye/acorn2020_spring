@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/css3/Step05_AnimateCss</title>
+<!-- animate css 로딩 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+<style>
+	.container{
+		width: 768px;
+		margin: 300px auto 0;
+	}
+	h1{
+		text-align: center;
+	}
+	#one{
+		animation-duration: 3s;
+		animation-iteration-count: infinite;
+	}
+</style>
+</head>
+<body>
+<div class="container">
+	<h1 class="animate__animated animate__tada">Animate Me</h1>
+	<h1 id="one" class="animate__animated animate__zoomIn">Animate Me</h1>
+	<button id="myBtn" class="animate__animated">마우스를 올리세요 myBtn</button>
+	<button id="yourBtn" class="animate__animated">마우스를 올리세요 yourBtn</button>
+</div>
+<script src="../resources/js/jquery-3.5.1.js"></script>
+<script>
+	$("#myBtn").on("mouseover", function(){
+		$(this).addClass("animate__swing");
+	});
+	
+	$("#yourBtn").on("mouseover", function(){
+		$(this)
+		.addClass("animate__swing")
+		// animationend 이벤트를 한 번만 걸어준다(one)
+		// animationend 이벤트는 keyFrame Event를 말한다.
+		.one("animationend", function(){
+			$(this).removeClass("animate__swing");
+		});
+	});
+</script>
+</body>
+</html>
