@@ -16,5 +16,5 @@
 	<%=callback %>({num:<%=num %>, name:"<%=name %>"});
 <%} else {%>
 	<%--json으로 응답한다.  --%>
-	{"num":<%=num --%>, "name":"<%=name %>"}
+	{"num":<%=num %>, "name":"<%=name %>"}
 <%} %>
