@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<title>jsonp03.html</title>
+<!-- angularjs 로딩 -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
+<script>
+	var myApp=angular.module("myApp", []);
+	
+	myApp.controller("one", function($scope, $http){
+		//회원정보 얻어오기 버튼 클릭하면 호출되는 함수
+		$scope.getInfo=function(){
+			//callback=JSON_CALLBACK, callback함수를 알아서 만들어서 전달한다.
+			//콜백함수명은 실행할 때마다 바뀐다.
+			var url="http://localhost:8888/spring05/angularjs/jsonp01.jsp?callback=JSON_CALLBACK";
+			$http
+			.jsonp(url)
+			.success(function(data){
+				console.log(data);
+				$scope.info="번호: "+data.num+" 이름: "+data.name;
+			})
+			.error(function(data){
+				console.log(data);
+			});
+		};
+	});
+</script>
+</head>
+<body data-ng-controller="one">
+<h1>jquery를 활용한 jsonp 예제</h1>
+<button data-ng-click="getInfo()">회원 정보 얻어오기</button>
+<p>{{info}}</p>
+</body>
+</html>
