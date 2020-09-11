@@ -8,6 +8,9 @@
 	int num=1;
 	String name="김구라";
 	
+	// jqeury가 임의로 콜백함수명을 만들어서 데이터 전달(서버에 'callback' 약속어가 있다.)
+	System.out.println("callback 함수명: "+callback);
+	
 %>
 <%if(callback != null){ %>
 	<%=callback %>({num:<%=num %>, name:"<%=name %>"});
