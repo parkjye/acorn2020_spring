@@ -20,8 +20,8 @@ public class ExceptionController {
 		//exception  이라는 키값으로 예외 객체를 담고 
 		mView.addObject("exception", nde);
 		
-		//forward이동
-		mView.setViewName("error/info");
+		//forward이동 
+		mView.setViewName("error/info"); //WEB-INf/views ~ .jsp
 		
 		return mView;
 	}
